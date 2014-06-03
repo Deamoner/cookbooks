@@ -1,4 +1,3 @@
-include_recipe 'opsworks_initial_setup::swap' if node[:ec2] && node[:ec2][:instance_type] == 't1.micro'
 include_recipe 'opsworks_initial_setup::sysctl'
 include_recipe 'opsworks_initial_setup::limits'
 include_recipe 'opsworks_initial_setup::bind_mounts'

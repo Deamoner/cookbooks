@@ -10,5 +10,5 @@ template 'mysql configuration' do
   owner 'root'
   group 'root'
   mode 0644
-  notifies :restart, "service[mysql]"
+  notifies :restart, resources(:service => 'mysql')
 end

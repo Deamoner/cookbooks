@@ -1,10 +1,7 @@
-name        "memcached"
+maintainer "Amazon Web Services"
 description "Installs Memcached"
-maintainer  "AWS OpsWorks"
-license     "Apache 2.0"
-version     "1.0.0"
-
-depends "opsworks_agent_monit"
+version "0.1"
+supports "ubuntu"
 
 recipe "memcached::server", "Memcached server"
 recipe "memcached::ruby", "Memcached Ruby client libraries"

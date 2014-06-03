@@ -1,7 +1,3 @@
-name        "opsworks_agent_monit"
+maintainer "Amazon Web Services"
 description "Configures monit for the OpsWorks-Agent"
-maintainer  "AWS OpsWorks"
-license     "Apache 2.0"
-version     "1.0.0"
-
-depends 'opsworks_initial_setup'
+version "0.1"

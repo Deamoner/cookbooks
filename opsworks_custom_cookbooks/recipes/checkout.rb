@@ -24,41 +24,32 @@ elsif node[:opsworks_custom_cookbooks][:scm][:type].to_s == 's3'
   }
 end
 
-case node[:opsworks_custom_cookbooks][:scm][:type]
-when 'git'
-  git "Download Custom Cookbooks" do
+scm "Download Custom Cookbooks" do
+  user node[:opsworks_custom_cookbooks][:user]
+  group node[:opsworks_custom_cookbooks][:group]
+
+  case node[:opsworks_custom_cookbooks][:scm][:type]
+  when 'git'
+    provider Chef::Provider::Git
     enable_submodules node[:opsworks_custom_cookbooks][:enable_submodules]
     depth nil
-
-    user node[:opsworks_custom_cookbooks][:user]
-    group node[:opsworks_custom_cookbooks][:group]
-    action :checkout
-    destination node[:opsworks_custom_cookbooks][:destination]
-    repository node[:opsworks_custom_cookbooks][:scm][:repository]
-    revision node[:opsworks_custom_cookbooks][:scm][:revision]
-    retries 2
-    not_if do
-      node[:opsworks_custom_cookbooks][:scm][:repository].blank? || ::File.directory?(node[:opsworks_custom_cookbooks][:destination])
-    end
-  end
-when 'svn'
-  subversion "Download Custom Cookbooks" do
+  when 'svn'
+    provider Chef::Provider::Subversion
     svn_username node[:opsworks_custom_cookbooks][:scm][:user]
     svn_password node[:opsworks_custom_cookbooks][:scm][:password]
-
-    user node[:opsworks_custom_cookbooks][:user]
-    group node[:opsworks_custom_cookbooks][:group]
-    action :checkout
-    destination node[:opsworks_custom_cookbooks][:destination]
-    repository node[:opsworks_custom_cookbooks][:scm][:repository]
-    revision node[:opsworks_custom_cookbooks][:scm][:revision]
-    retries 2
-    not_if do
-      node[:opsworks_custom_cookbooks][:scm][:repository].blank? || ::File.directory?(node[:opsworks_custom_cookbooks][:destination])
-    end
+  else
+    raise "unsupported SCM type #{node[:opsworks_custom_cookbooks][:scm][:type].inspect}"
   end
-else
-  raise "unsupported SCM type #{node[:opsworks_custom_cookbooks][:scm][:type].inspect}"
+
+  action :checkout
+  destination node[:opsworks_custom_cookbooks][:destination]
+  repository node[:opsworks_custom_cookbooks][:scm][:repository]
+  revision node[:opsworks_custom_cookbooks][:scm][:revision]
+  user node[:opsworks_custom_cookbooks][:user]
+
+  not_if do
+    node[:opsworks_custom_cookbooks][:scm][:repository].blank? || ::File.directory?(node[:opsworks_custom_cookbooks][:destination])
+  end
 end
 
 ruby_block 'Move single cookbook contents into appropriate subdirectory' do
@@ -76,8 +67,6 @@ ruby_block 'Move single cookbook contents into appropriate subdirectory' do
     ::File.exists?(metadata = File.join(node[:opsworks_custom_cookbooks][:destination], 'metadata.rb')) && File.read(metadata).match(/^\s*name\s+\S+$/)
   end
 end
-
-include_recipe "opsworks_custom_cookbooks::berkshelf"
 
 execute "ensure correct permissions of custom cookbooks" do
   command "chmod -R go-rwx #{node[:opsworks_custom_cookbooks][:destination]}"

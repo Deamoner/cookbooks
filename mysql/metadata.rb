@@ -1,8 +1,10 @@
-name        "mysql"
-description "Installs and configures MySQL"
-maintainer  "AWS OpsWorks"
-license     "Apache 2.0"
-version     "1.0.0"
+maintainer        "Amazon Web Services"
+license           "Apache 2.0"
+description       "Installs and configures MySQL"
+version           "0.1"
+recipe            "mysql::client", "Installs MySQL"
+recipe            "mysql::server", "Installs MySQL"
 
-recipe "mysql::client", "Installs MySQL"
-recipe "mysql::server", "Installs MySQL"
+['centos','redhat','fedora','amazon','debian','ubuntu'].each do |os|
+  supports os
+end

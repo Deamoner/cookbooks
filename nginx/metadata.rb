@@ -1,8 +1,12 @@
-name        "nginx"
-description "Installs and configures nginx"
-maintainer  "AWS OpsWorks"
-license     "Apache 2.0"
-version     "1.0.0"
+maintainer        "Opscode, Inc."
+maintainer_email  "cookbooks@opscode.com"
+license           "Apache 2.0"
+description       "Installs and configures nginx"
+version           "0.8"
+
+%w{ ubuntu debian }.each do |os|
+  supports os
+end
 
 attribute "nginx/dir",
   :display_name => "Nginx Directory",
@@ -72,13 +76,3 @@ attribute "nginx/worker_connections",
 attribute "nginx/server_names_hash_bucket_size",
   :display_name => "Nginx Server Names Hash Bucket Size",
   :default => "64"
-
-attribute "nginx/proxy_read_timeout",
-  :display_name => "Nginx Proxy Read Timeout",
-  :description => "Sets the read timeout for the response of the proxied server. It determines how long nginx will wait to get the response to a request.",
-  :default => "60"
-
-attribute "nginx/proxy_send_timeout",
-  :display_name => "Nginx Proxy Send Timeout",
-  :description => "Assigns timeout with the transfer of request to the upstream server.",
-  :default => "60"

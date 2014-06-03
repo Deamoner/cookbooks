@@ -1,14 +1,12 @@
-name        "rails"
+maintainer "Amazon Web Services"
 description "Installs Rails"
-maintainer  "AWS OpsWorks"
-license     "Apache 2.0"
-version     "1.0.0"
-
-depends "apache2"
-depends "deploy"
-depends "nginx"
+version "0.1"
+supports "ubuntu", ">= 8.10"
 
 recipe "rails::configure", "Re-configure a Rails application"
+
+depends "apache2"
+depends "nginx"
 
 attribute "rails",
   :display_name => "Rails",

@@ -1,7 +1,4 @@
-name        "opsworks_cleanup"
+maintainer "Amazon Web Services"
 description "Cleans up Chef run"
-maintainer  "AWS OpsWorks"
-license     "Apache 2.0"
-version     "1.0.0"
+version "0.1"
 
-depends 'opsworks_initial_setup'

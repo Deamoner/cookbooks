@@ -1,8 +1,8 @@
-name        "packages"
-description "Helper library to determine whether distribution-only packages are installed"
-maintainer  "AWS OpsWorks"
-license     "Apache 2.0"
-version     "1.0.0"
+maintainer        "Opscode, Inc."
+maintainer_email  "cookbooks@opscode.com"
+license           "Apache 2.0"
+description       "Helper library to determine whether distribution-only packages are installed"
+version           "0.7"
 
 attribute "packages",
   :display_name => "Packages",

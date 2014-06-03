@@ -5,9 +5,7 @@ describe_recipe 'opsworks_ganglia::views' do
   include MiniTest::Chef::Assertions
 
   it 'creates conf dir' do
-    directory(
-      node[:ganglia][:conf_dir]
-    ).must_exist.with(:mode, '755').and(:owner, node[:apache][:user])
+    directory(node[:ganglia][:conf_dir]).must_exist.with(:mode, '755').and(:owner, node[:ganglia][:web][:apache_user])
   end
 
   it 'creates json files for each instance' do
@@ -20,15 +18,13 @@ describe_recipe 'opsworks_ganglia::views' do
     end
 
     instances.keys.each do |instance_name|
-      file(
-        ::File.join(node[:ganglia][:datadir], 'conf', "host_#{instance_name}.json")
-      ).must_exist.with(:mode, '644').and(:owner, node[:apache][:user]).and(:group, node[:apache][:group])
+      file(File.join(node[:ganglia][:datadir], 'conf', "host_#{instance_name}.json")).must_exist.with(
+           :mode, '644').and(:owner, node[:ganglia][:web][:apache_user]).and(:group, node[:ganglia][:web][:apache_group])
     end
   end
 
   it 'creates view_overview json' do
-    file(
-      ::File.join(node[:ganglia][:datadir], 'conf', 'view_overview.json')
-    ).must_exist.with(:mode, '644').and(:owner, node[:apache][:user]).and(:group, node[:apache][:group])
+    file(File.join(node[:ganglia][:datadir], 'conf', 'view_overview.json')).must_exist.with(
+         :mode, '644').and(:owner, node[:ganglia][:web][:apache_user]).and(:group, node[:ganglia][:web][:apache_group])
   end
 end

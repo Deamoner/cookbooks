@@ -4,16 +4,24 @@ else
   directory node[:opsworks_custom_cookbooks][:destination] do
     action :delete
     recursive true
-
-    only_if {node[:opsworks_custom_cookbooks][:destination]}
   end
 end
 
-ruby_block 'merge all cookbooks sources' do
+ruby_block "Load the custom cookbooks" do
   block do
-     FileUtils.rm_rf Opsworks::InstanceAgent::Environment.merged_cookbooks_path
-     FileUtils.cp_r Opsworks::InstanceAgent::Environment.default_cookbooks_path, Opsworks::InstanceAgent::Environment.merged_cookbooks_path
-     FileUtils.cp_r "#{Opsworks::InstanceAgent::Environment.berkshelf_cookbooks_path}/.", Opsworks::InstanceAgent::Environment.merged_cookbooks_path if ::File.directory?(Opsworks::InstanceAgent::Environment.berkshelf_cookbooks_path)
-     FileUtils.cp_r "#{Opsworks::InstanceAgent::Environment.site_cookbooks_path}/.", Opsworks::InstanceAgent::Environment.merged_cookbooks_path if ::File.directory?(Opsworks::InstanceAgent::Environment.site_cookbooks_path)
+    if ::File.directory?(node[:opsworks_custom_cookbooks][:destination])
+      Chef::Log.info("Loading custom cookbooks from #{node[:opsworks_custom_cookbooks][:destination]}")
+      
+      # add new Cookbooks and keep old
+      Chef::Config.cookbook_path = [Chef::Config.cookbook_path, node[:opsworks_custom_cookbooks][:destination]].flatten
+      
+      # load the new cookbooks so that they can override our templates
+      load_new_cookbooks
+    end
+  end
+  
+  only_if do
+    Chef::Log.info("Loading custom cookbooks") if node[:opsworks_custom_cookbooks][:enabled]
+    node[:opsworks_custom_cookbooks][:enabled]
   end
 end
