@@ -1,4 +1,4 @@
-appname = node[:opsworks][:applications][i][:name];
+appname = node[:deploy]['appshortname'][:application];
 bash "change_permissions" do
   user "root"
   code <<-EOH
