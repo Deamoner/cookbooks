@@ -4,7 +4,7 @@ node[:deploy].each do |application, deploy|
 	bash "change_permissions" do
 	  user "root"
 	  code <<-EOH
-	  cd /srv/www/#{appname}
+	  cd #{appname}
 	  chmod -Rf 777 current/*
 	  EOH
 	end
