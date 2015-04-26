@@ -4,5 +4,6 @@ bash "backup_uploads_prod" do
   code <<-EOH
   sudo sh -c "sync; echo 3 > /proc/sys/vm/drop_caches"
   yes | cp -Rf current/assets/uploads backup/temp/
+  chmod -Rf 777 current/assets
   EOH
 end
