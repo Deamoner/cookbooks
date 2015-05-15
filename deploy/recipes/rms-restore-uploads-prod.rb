@@ -4,6 +4,6 @@ bash "restore_uploads_prod" do
   code <<-EOH
   sudo sh -c "sync; echo 3 > /proc/sys/vm/drop_caches"
   chmod -Rf 777 current/assets
-  yes | cp -Rf backup/temp/* current/assets/uploads/*
+  yes | cp ^index.html -Rf backup/temp/uploads/* current/assets/uploads/*
   EOH
 end
